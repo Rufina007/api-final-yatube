@@ -1,21 +1,30 @@
 # API для Yatube
 
-REST API для социальной сети Yatube, где пользователи могут публиковать записи и подписываться на авторов.
+REST API для социальной сети Yatube, где пользователи могут публиковать записи,
+оставлять комментарии и подписываться на авторов.
 
-## Описание
+# Описание
 
 API позволяет:
 - Просматривать, создавать, редактировать и удалять публикации
 - Просматривать и создавать комментарии к публикациям
 - Просматривать сообщества
-- Подписываться на авторов
+- Подписываться на авторов и просматривать свои подписки
 
-## Установка
+# Стек технологий
+
+- Python 3.9+
+- Django 3.2
+- Django REST Framework 3.12
+- Simple JWT
+- Djoser
+
+# Установка
 
 Клонировать репозиторий и перейти в него:
 
 ```bash
-git clone https://github.com/<username>/api_final_yatube.git
+git clone https://github.com/Rufina007/api_final_yatube.git
 cd api_final_yatube
 ```
 
@@ -45,9 +54,9 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-## Примеры запросов
+# Примеры запросов
 
-Получить JWT-токен:
+# Получить JWT-токен
 
 ```
 POST /api/v1/jwt/create/
@@ -57,13 +66,40 @@ POST /api/v1/jwt/create/
 }
 ```
 
-Получить список публикаций:
+Ответ:
+```json
+{
+    "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+    "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+}
+```
+
+# Получить список публикаций
 
 ```
 GET /api/v1/posts/
 ```
 
-Создать публикацию:
+Ответ:
+```json
+{
+    "count": 2,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 1,
+            "author": "username",
+            "text": "Текст публикации",
+            "pub_date": "2024-01-01T12:00:00Z",
+            "image": null,
+            "group": null
+        }
+    ]
+}
+```
+
+# Создать публикацию
 
 ```
 POST /api/v1/posts/
@@ -73,12 +109,55 @@ Authorization: Bearer <token>
 }
 ```
 
-Подписаться на автора:
+Ответ:
+```json
+{
+    "id": 2,
+    "author": "username",
+    "text": "Текст публикации",
+    "pub_date": "2024-01-01T12:00:00Z",
+    "image": null,
+    "group": null
+}
+```
+
+# Подписаться на автора
 
 ```
 POST /api/v1/follow/
 Authorization: Bearer <token>
 {
-    "following": "username"
+    "following": "author_username"
 }
 ```
+
+Ответ:
+```json
+{
+    "user": "username",
+    "following": "author_username"
+}
+```
+
+# Получить комментарии к публикации
+
+```
+GET /api/v1/posts/1/comments/
+```
+
+Ответ:
+```json
+[
+    {
+        "id": 1,
+        "author": "username",
+        "post": 1,
+        "text": "Текст комментария",
+        "created": "2024-01-01T12:00:00Z"
+    }
+]
+```
+
+# Автор
+
+Руслана
